@@ -1,3 +1,4 @@
+import axios from "../utils/axios";
 import React, { useState } from "react";
 
 function Home() {
@@ -34,12 +35,25 @@ function Home() {
     }
   }
 
-  function createRoom() {
-    if (validation()) {
-      // create a room
+  const createRoom = async () => {
+    if (!validation()) return;
+
+    try {
       console.log("Creating room with:", userDetails);
+      const response = await axios.post("/api/v1/rooms", userDetails.roomId, {
+        headers: {
+          "Content-Type": "text/plain",
+        },
+      });
+
+      console.log("Room created successfully:", response.data);
+    } catch (error) {
+      console.error(
+        "Error creating room:",
+        error.response?.data || error.message
+      );
     }
-  }
+  };
 
   return (
     <div className="w-full h-screen bg-zinc-950 flex justify-center items-center">
